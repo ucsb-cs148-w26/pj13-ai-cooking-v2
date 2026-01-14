@@ -15,9 +15,10 @@ Event finder is an app that allows a user to search for events in their area and
 - Whisper Xia
 
 ## Tech Stack
-- Frontend: React TS
-- Backend: TBD
+- Frontend: React TS    
+- Backend: FastAPI
 - Database: Firebase DB for caching events in a location
+- Cloud Compute: Netlify
 - API: OpenAI for searching the internet for activities to do. Various API endpoints to search event sites easily, ie Reddit API, TicketMaster API
 
 ## App Plan
