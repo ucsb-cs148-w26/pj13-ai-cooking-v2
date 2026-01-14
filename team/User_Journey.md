@@ -1,1 +1,1 @@
-To be implemented
+As a user of this site, when I am looking for activities to check out in the area, I can enter the site and look for events. Many different kinds of activities (ex. art exhibitions, festivals, live music), will be combined into one place instead of their respective advertising pages, and the details of the events will be easy to access. This makes it very convenient for the user (any individual) to find upcoming or currently occuring events in their area.
