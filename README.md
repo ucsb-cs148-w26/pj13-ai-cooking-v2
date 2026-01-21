@@ -1,6 +1,6 @@
 # Project: Event Finder
 
-##Deployment
+## Deployment
 https://pj13-event-finder-2j74.vercel.app/
 
 ## Description
