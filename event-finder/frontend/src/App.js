@@ -7,10 +7,10 @@ function App() {
   const [endDate, setEndDate] = useState('');
   const [usePreciseLocation, setUsePreciseLocation] = useState(false);
   const [filters, setFilters] = useState({
-    eventType: '',
-    category: '',
-    priceRange: '',
-    duration: ''
+    eventType: [],
+    category: [],
+    priceRange: { min: '', max: '' },
+    duration: []
   });
   const [showFilters, setShowFilters] = useState(false);
   const [events, setEvents] = useState([]);
@@ -31,6 +31,37 @@ function App() {
       ...prev,
       [filterName]: value
     }));
+  };
+
+  const handlePriceRangeChange = (field, value) => {
+    setFilters(prev => ({
+      ...prev,
+      priceRange: {
+        ...prev.priceRange,
+        [field]: value === '' ? '' : parseFloat(value) || ''
+      }
+    }));
+  };
+
+  const handleMultiSelectChange = (filterName, value) => {
+    setFilters(prev => {
+      const currentArray = prev[filterName] || [];
+      const isSelected = currentArray.includes(value);
+      
+      if (isSelected) {
+        // Remove the value if it's already selected
+        return {
+          ...prev,
+          [filterName]: currentArray.filter(item => item !== value)
+        };
+      } else {
+        // Add the value if it's not selected
+        return {
+          ...prev,
+          [filterName]: [...currentArray, value]
+        };
+      }
+    });
   };
 
   return (
@@ -100,68 +131,105 @@ function App() {
           {showFilters && (
             <div className="filters-section">
               <div className="form-section">
-                <label htmlFor="event-type">Event Type</label>
-                <select
-                  id="event-type"
-                  value={filters.eventType}
-                  onChange={(e) => handleFilterChange('eventType', e.target.value)}
-                >
-                  <option value="">All Types</option>
-                  <option value="concert">Concert</option>
-                  <option value="sports">Sports</option>
-                  <option value="theater">Theater</option>
-                  <option value="festival">Festival</option>
-                  <option value="conference">Conference</option>
-                  <option value="workshop">Workshop</option>
-                  <option value="other">Other</option>
-                </select>
+                <label>Event Type</label>
+                <div className="checkbox-group">
+                  {[
+                    { value: 'concert', label: 'Concert' },
+                    { value: 'sports', label: 'Sports' },
+                    { value: 'theater', label: 'Theater' },
+                    { value: 'festival', label: 'Festival' },
+                    { value: 'conference', label: 'Conference' },
+                    { value: 'workshop', label: 'Workshop' },
+                    { value: 'other', label: 'Other' }
+                  ].map(option => (
+                    <label key={option.value} className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        value={option.value}
+                        checked={filters.eventType.includes(option.value)}
+                        onChange={(e) => handleMultiSelectChange('eventType', option.value)}
+                      />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
               </div>
 
               <div className="form-section">
-                <label htmlFor="category">Category</label>
-                <select
-                  id="category"
-                  value={filters.category}
-                  onChange={(e) => handleFilterChange('category', e.target.value)}
-                >
-                  <option value="">All Categories</option>
-                  <option value="music">Music</option>
-                  <option value="arts">Arts & Culture</option>
-                  <option value="food">Food & Drink</option>
-                  <option value="outdoor">Outdoor</option>
-                  <option value="family">Family</option>
-                  <option value="networking">Networking</option>
-                </select>
+                <label>Category</label>
+                <div className="checkbox-group">
+                  {[
+                    { value: 'music', label: 'Music' },
+                    { value: 'arts', label: 'Arts & Culture' },
+                    { value: 'food', label: 'Food & Drink' },
+                    { value: 'outdoor', label: 'Outdoor' },
+                    { value: 'family', label: 'Family' },
+                    { value: 'networking', label: 'Networking' }
+                  ].map(option => (
+                    <label key={option.value} className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        value={option.value}
+                        checked={filters.category.includes(option.value)}
+                        onChange={(e) => handleMultiSelectChange('category', option.value)}
+                      />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
               </div>
 
               <div className="form-section">
-                <label htmlFor="price-range">Price Range</label>
-                <select
-                  id="price-range"
-                  value={filters.priceRange}
-                  onChange={(e) => handleFilterChange('priceRange', e.target.value)}
-                >
-                  <option value="">Any Price</option>
-                  <option value="free">Free</option>
-                  <option value="low">$0 - $25</option>
-                  <option value="medium">$25 - $50</option>
-                  <option value="high">$50+</option>
-                </select>
+                <label>Price Range ($)</label>
+                <div className="price-range-inputs">
+                  <div className="price-input-group">
+                    <label htmlFor="price-min">Min</label>
+                    <input
+                      type="number"
+                      id="price-min"
+                      min="0"
+                      step="0.01"
+                      value={filters.priceRange.min}
+                      onChange={(e) => handlePriceRangeChange('min', e.target.value)}
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <span className="price-range-separator">-</span>
+                  <div className="price-input-group">
+                    <label htmlFor="price-max">Max</label>
+                    <input
+                      type="number"
+                      id="price-max"
+                      min="0"
+                      step="0.01"
+                      value={filters.priceRange.max}
+                      onChange={(e) => handlePriceRangeChange('max', e.target.value)}
+                      placeholder="No limit"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="form-section">
-                <label htmlFor="duration">Duration</label>
-                <select
-                  id="duration"
-                  value={filters.duration}
-                  onChange={(e) => handleFilterChange('duration', e.target.value)}
-                >
-                  <option value="">Any Duration</option>
-                  <option value="short">Less than 2 hours</option>
-                  <option value="medium">2-4 hours</option>
-                  <option value="long">4+ hours</option>
-                  <option value="multi-day">Multi-day</option>
-                </select>
+                <label>Duration</label>
+                <div className="checkbox-group">
+                  {[
+                    { value: 'short', label: 'Less than 2 hours' },
+                    { value: 'medium', label: '2-4 hours' },
+                    { value: 'long', label: '4+ hours' },
+                    { value: 'multi-day', label: 'Multi-day' }
+                  ].map(option => (
+                    <label key={option.value} className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        value={option.value}
+                        checked={filters.duration.includes(option.value)}
+                        onChange={(e) => handleMultiSelectChange('duration', option.value)}
+                      />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
               </div>
             </div>
           )}

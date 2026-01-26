@@ -72,6 +72,7 @@
 
 .form-section input[type="text"]:focus,
 .form-section input[type="datetime-local"]:focus,
+.form-section input[type="number"]:focus,
 .form-section select:focus {
   outline: none;
   border-color: #667eea;
@@ -87,17 +88,75 @@
   margin-top: 1rem;
 }
 
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
 .checkbox-label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
   font-weight: normal;
+  padding: 0.25rem 0;
+  color: #333;
+}
+
+.checkbox-label:hover {
+  color: #667eea;
 }
 
 .checkbox-label input[type="checkbox"] {
   width: auto;
   cursor: pointer;
+  accent-color: #667eea;
+}
+
+.price-range-inputs {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.price-input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.price-input-group label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.price-input-group input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.price-input-group input[type="number"]:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.price-range-separator {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 0.5rem;
+  align-self: flex-end;
 }
 
 .filters-toggle {
