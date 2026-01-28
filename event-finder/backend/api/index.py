@@ -116,11 +116,13 @@ def search_events(
     
     try:
         response = requests.get(f"{TICKETMASTER_BASE_URL}/events.json", params=params)
+        print(f"Querying URL: {response.url}")
         response.raise_for_status()
         data = response.json()
         
         # Extract events from Ticketmaster response
         events = []
+        seen_names = set()
         if "_embedded" in data and "events" in data["_embedded"]:
             for event in data["_embedded"]["events"]:
                 # Extract event information
@@ -168,6 +170,9 @@ def search_events(
                         if max_price is not None and event_min > max_price:
                             continue
                 
+                if event_info["name"] in seen_names:
+                    continue
+                seen_names.add(event_info["name"])
                 events.append(event_info)
         
         return {
